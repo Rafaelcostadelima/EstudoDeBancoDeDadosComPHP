@@ -11,7 +11,11 @@ if (!$conn) {
     die("Falha na conexão: " . mysqli_connect_error());
 }
 
-echo "Conectado com sucesso ao banco de dados!";
+$mensagem = "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -20,9 +24,12 @@ echo "Conectado com sucesso ao banco de dados!";
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Conexão com Banco de Dados</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="shortcut icon" type="image/png" href="img/logo.png">
+    <link rel="icon" type="image/png" href="img/logo.png">
 </head>
 <body>
-
+    <div class="container">
+        <h2>Criar uma Conta</h2>
+        <?php if($mensagem != ""): ?>
+    </div>
 </body>
 </html>
