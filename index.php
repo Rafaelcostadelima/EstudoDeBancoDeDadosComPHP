@@ -14,7 +14,17 @@ if (!$conn) {
 $mensagem = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
+    $email = $_POST['email'];
+    $user = $_POST['username'];
+    $pass = password_hash($_POST['senha'], PASSWORD_DEFAULT);
+    $sql = "INSERT INTO usuarios (email, username, senha) VALUES (?, ?, ?)";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "sss", $email, $user, $pass);
+    if (mysqli_stmt_execute($stmt)) {
+        $mensagem = "Usuário cadastrado com suscesso";
+    } else {
+        $mensagem = "Erro ao cadastrar: " . mysqli_error($conn);
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -29,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <div class="container">
         <h2>Criar uma Conta</h2>
-        <?php if($mensagem != ""): ?>
+        <?php  ?>
     </div>
 </body>
 </html>
