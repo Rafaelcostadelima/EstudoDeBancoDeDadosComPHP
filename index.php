@@ -39,7 +39,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <div class="container">
         <h2>Criar uma Conta</h2>
-        <?php echo"Tentativa de merge com a origin main (teste rápido)"?>
     </div>
 </body>
 </html>
