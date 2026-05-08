@@ -21,10 +21,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { //Guardando as informações sobre o
     $sql = "INSERT INTO usuarios (email, username, senha) VALUES (?, ?, ?)"; //Insira dentro da tabela de usuários. Dentro do "(email, username, senha)", indicamos a exata coluna que queremos pra onde os dados vão. O "VALUES (?, ?, ?)" serve para segurança. Com as interrogações, o PHP entende o input estritamente como um texto comum, então os hackers não conseguem burlar esse sistema
     $stmt = mysqli_prepare($conn, $sql); //Aqui, o código pede para que a conexão interceda com o banco de dados, e enviando os dados que inserimos na linha anterior. Aqui, o banco de dados já se prepara para receber os dados que entregaremos para ele nas próximas linhas
     mysqli_stmt_bind_param($stmt, "sss", $email, $user, $pass); //Aqui, o código finalmente envia os dados corretos para cada espaço reservado que codamos na linha 21. O 'sss' significa que armazenaremos 3 strings, é uma etapa final de segurança do PHP. O PHP entende que tudo o que foi colocado dentro dos valores são apenas strings, então códigos maliciosos dos hackers não terão efeito quando inseridos no formulário
-    if (mysqli_stmt_execute($stmt)) {
-        $mensagem = "Usuário cadastrado com suscesso";
+    if (mysqli_stmt_execute($stmt)) { //Aqui, o código aperta o botão de salvar no banco de dados
+        $mensagem = "Usuário cadastrado com suscesso"; //Caso seja salvo com sucesso, o programa vai dar esta mensagem
     } else {
-        $mensagem = "Erro ao cadastrar: " . mysqli_error($conn);
+        $mensagem = "Erro ao cadastrar: " . mysqli_error($conn); //Caso dê errado, vai dar esta tela
     }
 }
 ?>
