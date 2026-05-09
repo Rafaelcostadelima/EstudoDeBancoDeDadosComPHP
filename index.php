@@ -14,7 +14,7 @@ if (!$conn) {
 
 $mensagem = ""; //Define uma mensagem em branco para usarmos mais tarde
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") { //Guardando as informações sobre o servidor e sobre quem, está acessando ele. Com este "= 'POST'" a gente delimita para fazer a ação abaixo apenas quando o método for "POST", que é quando o usuário clica no botão
+if ($_SERVER["REQUEST_METHOD"] == "POST") { //Guardando as informações sobre o servidor e sobre quem, está acessando ele. Com este "= 'POST'" a gente delimita para fazer a ação abaixo apenas quando o método for "POST", que é quando o usuário clica no botão. Só de entrar no sie, já temos informações no método "GET", por este motivo que devemos filtrar para apenas "POST"
     $email = $_POST['email']; //Pega o que foi digitado no input com o 'name="email"'
     $user = $_POST['username']; //Pega o que foi digitado no input com o "name='username'"
     $pass = password_hash($_POST['senha'], PASSWORD_DEFAULT); //Este código criptografa a senha digitada pelo usuário
@@ -26,6 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { //Guardando as informações sobre o
     } else {
         $mensagem = "Erro ao cadastrar: " . mysqli_error($conn); //Caso dê errado, vai dar esta tela
     }
+    mysqli_stmt_close($stmt); //Isso quebra o "molde" e libera a memória para outros usuários
 }
 ?>
 <!DOCTYPE html>
@@ -38,8 +39,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { //Guardando as informações sobre o
     <link rel="icon" type="image/png" href="img/logo.png">
 </head>
 <body>
-    <div class="container">
-        <h2>Criar uma Conta</h2>
-    </div>
+    <h2>Criar Nova Conta</h2>
+    <form action="index.php" method="POST">
+        <input type="email" name="email" placeholder="Seu email" required><br><br>
+        <input type="text" name="username" placeholder="Seu username" required><br><br>
+        <input type="password" name="senha" placeholder="Sua senha" required><br><br>
+        <button type="submit">Cadastrar</button>
+    </form>
+    <?php
+        if ($mensagem != ""){
+            echo "<p><strong>$mensagem</strong></p>";
+        }
+    ?>
 </body>
 </html>
