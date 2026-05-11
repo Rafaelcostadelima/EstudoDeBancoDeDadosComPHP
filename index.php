@@ -31,7 +31,7 @@
             $mensagem = "Falha ao tentar criar a conta";
         }
 
-        mysqli_close($stmt);
+        mysqli_stmt_close($stmt);
     }
 ?>
 <!DOCTYPE html>
