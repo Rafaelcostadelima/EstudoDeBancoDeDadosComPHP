@@ -1,60 +1,53 @@
 <?php
-    //Declarando as configurações para conexão com o banco de dados
-    $host = "localhost";
-    $usuario = "root";
-    $senha = "";
-    $banco = "meu_sistema";
+$host = "localhost";
+$usuario = "root";
+$senha = "";
+$banco = "empresa_db";
 
-    $conn = mysqli_connect($host, $usuario, $senha, $banco);
+// 1. Criando a conexão
+$conexao = mysqli_connect($host, $usuario, $senha, $banco);
 
-    //Se der algum problema de conexão, o site não passa daqui
-    if (!$conn){
-        die("Falha ao se conectar com um banco de dados ". mysqli_error());
-    }
+if (!$conn) {
+    die("Falha na conexão: " . mysqli_connect_error());
+}
 
-    //Variável que usaremos mais tarde
-    $mensagem = "";
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    
+    // 2. Capturando os dados
+    $nome = $_GET['nome_completo'];
+    $email = $_POST['email'];
+    
+    $senha_segura = password_hash($_POST['senha'], PASSWORD_DEFAULT);
 
-    //Aqui, apenas pegamos os dados inseridos quando aperta o botão
-    if($_SERVER["REQUEST_METHOD"] == "POST"){
-        $email = $_POST['email'];
-        $username = $_POST['username'];
-        //Criptografando a senha
-        $senha = password_hash($_POST['senha'], PASSWORD_DEFAULT);
+    // 3. Preparando para o Banco
+    $sql = "INSERT INTO funcionarios (nome_completo, email, senha) VALUES (?, ?)";
+    
+    $stmt = mysqli_prepare($conexao, $sql);
 
-        $sql = "INSERT INTO usuarios (email, username, senha) VALUES (?, ?, ?)";
-        $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, "sss", $email, $username, $senha);
-        if(mysqli_execute($stmt)){
-            $mensagem = "Conta criada com sucesso!";
-        } else{
-            $mensagem = "Falha ao tentar criar a conta";
-        }
+    // 4. Injetando os dados
+    mysqli_stmt_bind_param($stmt, "sss", $nome, $email, $_POST['senha']);
 
-        mysqli_stmt_close($stmt);
-    }
+    // 5. Executando
+    if (mysqli_stmt_execute($sql)) {
+        echo "Funcionário cadastrado!";
+    } 
+
+    mysqli_stmt_close($stmt);
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conexão com Banco de Dados</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/png" href="img/logo.png">
+    <title>Cadastro</title>
 </head>
 <body>
-    <h2>Criar Nova Conta</h2>
-    <form action="index.php" method="POST">
-        <input type="email" name="email" placeholder="Seu email" required><br><br>
-        <input type="text" name="username" placeholder="Seu username" required><br><br>
-        <input type="password" name="senha" placeholder="Sua senha" required><br><br>
-        <button type="submit">Cadastrar</button>
+    <form action="cadastro.php" method="POST">
+        <input type="text" name="nome_completo" placeholder="Nome">
+        <input type="email" name="email" placeholder="E-mail">
+        <input type="password" name="senha" placeholder="Senha">
+        <button type="submit">Cadastrar Funcionário</button>
     </form>
-    <?php
-        if ($mensagem != ""){
-            echo "<p><strong>$mensagem</strong></p>";
-        }
-    ?>
 </body>
 </html>
