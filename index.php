@@ -9,7 +9,7 @@
 
     //Se der algum problema de conexão, o site não passa daqui
     if (!$conn){
-        die("Falha ao se conectar com um banco de dados ". mysqli_error());
+        die("Falha ao se conectar com um banco de dados ". mysqli_connect_error());
     }
 
     //Variável que usaremos mais tarde
